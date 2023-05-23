@@ -89,12 +89,30 @@ public class VectorTilesResource {
       .filter(Predicate.not(Objects::isNull))
       .toList();
 
+    var minZoom = serverContext
+      .vectorTileLayers()
+      .layers()
+      .stream()
+      .mapToInt(LayerParameters::minZoom)
+      .min()
+      .orElse(9);
+
+    var maxZoom = serverContext
+      .vectorTileLayers()
+      .layers()
+      .stream()
+      .mapToInt(LayerParameters::maxZoom)
+      .max()
+      .orElse(20);
+
     return new TileJson(
       uri,
       headers,
       requestedLayers,
       ignoreRouterId,
       "vectorTiles",
+      minZoom,
+      maxZoom,
       envelope,
       feedInfos
     );

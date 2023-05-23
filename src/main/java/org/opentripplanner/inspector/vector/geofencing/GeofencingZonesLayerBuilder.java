@@ -35,7 +35,7 @@ public class GeofencingZonesLayerBuilder extends LayerBuilder<Vertex> {
   }
 
   @Override
-  protected List<Geometry> getGeometries(Envelope query) {
+  protected List<Geometry> getGeometries(Envelope query, int z) {
     return streetIndex
       .getVerticesForEnvelope(query)
       .stream()

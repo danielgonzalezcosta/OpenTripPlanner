@@ -38,6 +38,7 @@ public class DigitransitStationPropertyMapper extends PropertyMapper<Station> {
     return List.of(
       new KeyValue("gtfsId", station.getId().toString()),
       new KeyValue("name", i18NStringMapper.mapNonnullToApi(station.getName())),
+      new KeyValue("stationLevel", levelsForStation(station)),
       new KeyValue(
         "type",
         childStops
@@ -69,5 +70,15 @@ public class DigitransitStationPropertyMapper extends PropertyMapper<Station> {
         )
       )
     );
+  }
+
+  private Integer levelsForStation(Station station) {
+    var counter = 1;
+    var iterator = station;
+    while (!iterator.getChildStations().isEmpty()) {
+      counter++;
+      iterator = (Station) iterator.getChildStations().iterator().next();
+    }
+    return counter;
   }
 }

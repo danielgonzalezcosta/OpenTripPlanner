@@ -98,6 +98,8 @@ public class GraphInspectorVectorTileResource {
       requestedLayers,
       ignoreRouterId,
       "inspector/vectortile",
+      9,
+      20,
       envelope,
       feedInfos
     );
@@ -123,6 +125,11 @@ public class GraphInspectorVectorTileResource {
     @Override
     public String mapper() {
       return "DebugClient";
+    }
+
+    @Override
+    public String defaultZoomLevels() {
+      return null;
     }
   }
 }

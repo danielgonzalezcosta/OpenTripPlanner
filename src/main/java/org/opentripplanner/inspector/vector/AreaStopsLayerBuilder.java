@@ -36,7 +36,7 @@ public class AreaStopsLayerBuilder extends LayerBuilder<AreaStop> {
   }
 
   @Override
-  protected List<Geometry> getGeometries(Envelope query) {
+  protected List<Geometry> getGeometries(Envelope query, int z) {
     return findAreaStops
       .apply(query)
       .stream()

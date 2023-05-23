@@ -55,7 +55,7 @@ public class VectorTileResponseFactory {
         cacheMaxSeconds = Math.min(cacheMaxSeconds, layerParameters.cacheMaxSeconds());
         VectorTile.Tile.Layer layer = layerBuilderFactory
           .createLayerBuilder(layerParameters, locale, context)
-          .build(envelope);
+          .build(envelope, z);
         mvtBuilder.addLayers(layer);
       }
     }

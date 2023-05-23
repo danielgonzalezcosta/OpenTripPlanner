@@ -26,6 +26,8 @@ public interface LayerParameters<T extends Enum<T>> {
    */
   String mapper();
 
+  String defaultZoomLevels();
+
   /**
    * Which is the maximum zoom level the layer should be visible on.
    */

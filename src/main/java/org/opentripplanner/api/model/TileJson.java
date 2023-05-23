@@ -23,10 +23,10 @@ public class TileJson implements Serializable {
   public final String scheme = "xyz";
 
   @SuppressWarnings("unused")
-  public final int minzoom = 9;
+  public final int minzoom;
 
   @SuppressWarnings("unused")
-  public final int maxzoom = 20;
+  public final int maxzoom;
 
   public final String name = "OpenTripPlanner";
   public final String attribution;
@@ -40,6 +40,8 @@ public class TileJson implements Serializable {
     String layers,
     String ignoreRouterId,
     String path,
+    int minZoom,
+    int maxZoom,
     WorldEnvelope envelope,
     Collection<FeedInfo> feedInfos
   ) {
@@ -71,5 +73,8 @@ public class TileJson implements Serializable {
 
     var c = envelope.center();
     center = new double[] { c.longitude(), c.latitude(), 9 };
+
+    this.minzoom = minZoom;
+    this.maxzoom = maxZoom;
   }
 }

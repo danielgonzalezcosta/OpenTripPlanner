@@ -119,7 +119,7 @@ public class VehicleParkingGroupsLayerTest {
       Locale.US
     );
 
-    List<Geometry> geometries = builder.getGeometries(new Envelope(0.99, 1.01, 1.99, 2.01));
+    List<Geometry> geometries = builder.getGeometries(new Envelope(0.99, 1.01, 1.99, 2.01), 0);
 
     assertEquals("[POINT (1.1 1.9)]", geometries.toString());
     assertEquals(
@@ -177,8 +177,8 @@ public class VehicleParkingGroupsLayerTest {
     }
 
     @Override
-    public List<Geometry> getGeometries(Envelope query) {
-      return super.getGeometries(query);
+    public List<Geometry> getGeometries(Envelope query, int z) {
+      return super.getGeometries(query, z);
     }
   }
 

@@ -5,6 +5,7 @@ import static org.opentripplanner.inspector.vector.LayerParameters.EXPANSION_FAC
 import static org.opentripplanner.inspector.vector.LayerParameters.MAX_ZOOM;
 import static org.opentripplanner.inspector.vector.LayerParameters.MIN_ZOOM;
 import static org.opentripplanner.standalone.config.framework.json.OtpVersion.V2_0;
+import static org.opentripplanner.standalone.config.framework.json.OtpVersion.V2_4;
 
 import java.util.Collection;
 import java.util.List;
@@ -72,6 +73,11 @@ public class VectorTileConfig
         .summary("Minimum zoom levels the layer is active for.")
         .asInt(MIN_ZOOM),
       node
+        .of("defaultZoomLevels")
+        .since(V2_4)
+        .summary("Default zoom level for items in the layer.")
+        .asString("0-22"),
+      node
         .of("cacheMaxSeconds")
         .since(V2_0)
         .summary("Sets the cache header in the response.")
@@ -95,6 +101,7 @@ public class VectorTileConfig
     String mapper,
     int maxZoom,
     int minZoom,
+    String defaultZoomLevels,
     int cacheMaxSeconds,
     double expansionFactor
   )

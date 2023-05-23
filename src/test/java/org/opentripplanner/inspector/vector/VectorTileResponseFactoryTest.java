@@ -29,6 +29,11 @@ class VectorTileResponseFactoryTest {
     public String mapper() {
       return "Colors";
     }
+
+    @Override
+    public String defaultZoomLevels() {
+      return null;
+    }
   }
 
   private static final List<LayerParameters<LayerType>> LAYERS = List.of(

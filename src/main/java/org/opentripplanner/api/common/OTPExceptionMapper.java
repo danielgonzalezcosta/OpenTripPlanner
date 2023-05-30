@@ -1,5 +1,7 @@
 package org.opentripplanner.api.common;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import graphql.schema.CoercingParseValueException;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.WebApplicationException;
@@ -43,6 +45,13 @@ public class OTPExceptionMapper implements ExceptionMapper<Exception> {
           Response.Status.fromStatusCode(OtpHttpStatus.STATUS_UNPROCESSABLE_ENTITY.statusCode())
         )
         .entity("OTP API Processing Timeout")
+        .type("text/plain")
+        .build();
+    }
+    if (ex instanceof JsonParseException || ex instanceof CoercingParseValueException) {
+      return Response
+        .status(Response.Status.BAD_REQUEST)
+        .entity(ex.getMessage())
         .type("text/plain")
         .build();
     }

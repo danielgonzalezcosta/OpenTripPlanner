@@ -118,13 +118,7 @@ public class LegMapper {
     } else if (domain instanceof StreetLeg streetLeg) {
       api.transitLeg = false;
       api.mode = ModeMapper.mapToApi(streetLeg.getMode());
-
-      if (domain.getPathwayId() != null) {
-        api.route = FeedScopedIdMapper.mapToApi(domain.getPathwayId());
-      } else {
-        // TODO OTP2 - This should be set to the street name according to the JavaDoc
-        api.route = "";
-      }
+      api.route = "";
     }
 
     api.interlineWithPreviousLeg = domain.isInterlinedWithPreviousLeg();

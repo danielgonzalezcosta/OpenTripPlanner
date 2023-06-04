@@ -24,6 +24,19 @@ public final class WgsCoordinate implements Serializable {
   private final double latitude;
   private final double longitude;
 
+  private final Double elevation;
+
+  public WgsCoordinate(double latitude, double longitude, Double elevation) {
+    // Verify coordinates are in range
+    DoubleUtils.requireInRange(latitude, LAT_MIN, LAT_MAX, "latitude");
+    DoubleUtils.requireInRange(longitude, LON_MIN, LON_MAX, "longitude");
+
+    // Normalize coordinates to precision around ~ 1 centimeters (7 decimals)
+    this.latitude = DoubleUtils.roundTo7Decimals(latitude);
+    this.longitude = DoubleUtils.roundTo7Decimals(longitude);
+    this.elevation = elevation != null ? DoubleUtils.roundToZeroDecimals(elevation) : null;
+  }
+
   public WgsCoordinate(double latitude, double longitude) {
     // Verify coordinates are in range
     DoubleUtils.requireInRange(latitude, LAT_MIN, LAT_MAX, "latitude");
@@ -32,18 +45,21 @@ public final class WgsCoordinate implements Serializable {
     // Normalize coordinates to precision around ~ 1 centimeters (7 decimals)
     this.latitude = DoubleUtils.roundTo7Decimals(latitude);
     this.longitude = DoubleUtils.roundTo7Decimals(longitude);
+    this.elevation = null;
   }
 
   public WgsCoordinate(Point point) {
     Objects.requireNonNull(point);
     this.latitude = DoubleUtils.roundTo7Decimals(point.getY());
     this.longitude = DoubleUtils.roundTo7Decimals(point.getX());
+    this.elevation = null;
   }
 
   public WgsCoordinate(Coordinate coordinate) {
     Objects.requireNonNull(coordinate);
     this.latitude = DoubleUtils.roundTo7Decimals(coordinate.getY());
     this.longitude = DoubleUtils.roundTo7Decimals(coordinate.getX());
+    this.elevation = null;
   }
 
   /**
@@ -95,6 +111,10 @@ public final class WgsCoordinate implements Serializable {
 
   public double longitude() {
     return longitude;
+  }
+
+  public Double elevation() {
+    return elevation;
   }
 
   /** Return OTP domain coordinate as JTS GeoTools Library coordinate. */

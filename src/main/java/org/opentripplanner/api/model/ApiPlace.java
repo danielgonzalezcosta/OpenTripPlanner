@@ -18,6 +18,8 @@ public class ApiPlace {
    */
   public String stopId = null;
 
+  public List<String> parentStopIds = null;
+
   /**
    * The "code" of the stop. Depending on the transit agency, this is often something that users
    * care about.
@@ -38,6 +40,11 @@ public class ApiPlace {
    * The latitude of the place.
    */
   public Double lat = null;
+
+  /**
+   * The elevation of the place.
+   */
+  public Double elevation = null;
 
   /**
    * The time the rider will arrive at the place.

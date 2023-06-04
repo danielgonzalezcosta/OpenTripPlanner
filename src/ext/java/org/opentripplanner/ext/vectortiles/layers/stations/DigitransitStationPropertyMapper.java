@@ -37,6 +37,7 @@ public class DigitransitStationPropertyMapper extends PropertyMapper<Station> {
 
     return List.of(
       new KeyValue("gtfsId", station.getId().toString()),
+      new KeyValue("elevation", station.getCoordinate().elevation()),
       new KeyValue("name", i18NStringMapper.mapNonnullToApi(station.getName())),
       new KeyValue("stationLevel", levelsForStation(station)),
       new KeyValue(

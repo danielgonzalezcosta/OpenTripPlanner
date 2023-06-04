@@ -140,6 +140,10 @@ public abstract class Vertex implements AStarVertex<State, Edge, Vertex>, Serial
     return getLat();
   }
 
+  public final double getZ() {
+    return getElevation();
+  }
+
   /** Get the longitude of the vertex */
   public final double getLon() {
     return x;
@@ -148,6 +152,10 @@ public abstract class Vertex implements AStarVertex<State, Edge, Vertex>, Serial
   /** Get the latitude of the vertex */
   public final double getLat() {
     return y;
+  }
+
+  public Double getElevation() {
+    return null;
   }
 
   /** If this vertex is located on only one street, get that street's name */

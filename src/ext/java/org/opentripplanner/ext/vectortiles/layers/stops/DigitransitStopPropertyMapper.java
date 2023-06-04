@@ -60,6 +60,7 @@ public class DigitransitStopPropertyMapper extends PropertyMapper<RegularStop> {
     );
     return List.of(
       new KeyValue("gtfsId", stop.getId().toString()),
+      new KeyValue("elevation", stop.getCoordinate().elevation()),
       new KeyValue("name", i18NStringMapper.mapNonnullToApi(stop.getName())),
       new KeyValue("code", stop.getCode()),
       new KeyValue("platform", stop.getPlatformCode()),

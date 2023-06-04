@@ -1,10 +1,6 @@
 package org.opentripplanner.framework.geometry;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -12,17 +8,7 @@ import org.geojson.GeoJsonObject;
 import org.geojson.LngLatAlt;
 import org.geotools.referencing.CRS;
 import org.locationtech.jts.algorithm.ConvexHull;
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.CoordinateSequence;
-import org.locationtech.jts.geom.CoordinateSequenceFactory;
-import org.locationtech.jts.geom.Envelope;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.GeometryCollection;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.LineString;
-import org.locationtech.jts.geom.LinearRing;
-import org.locationtech.jts.geom.MultiLineString;
-import org.locationtech.jts.geom.Polygon;
+import org.locationtech.jts.geom.*;
 import org.locationtech.jts.geom.impl.PackedCoordinateSequenceFactory;
 import org.locationtech.jts.linearref.LengthLocationMap;
 import org.locationtech.jts.linearref.LinearLocation;
@@ -96,24 +82,27 @@ public class GeometryUtils {
   public static LineString concatenateLineStrings(List<LineString> lineStrings) {
     GeometryFactory factory = getGeometryFactory();
     Predicate<Coordinate[]> nonZeroLength = coordinates -> coordinates.length != 0;
-    return factory.createLineString(
-      lineStrings
-        .stream()
-        .filter(Objects::nonNull)
-        .map(LineString::getCoordinates)
-        .filter(nonZeroLength)
-        .<CoordinateArrayListSequence>collect(
-          CoordinateArrayListSequence::new,
-          (acc, segment) -> {
-            if ((acc.size() == 0 || !acc.getCoordinate(acc.size() - 1).equals(segment[0]))) {
-              acc.extend(segment);
-            } else {
-              acc.extend(segment, 1);
+    var coordinates = lineStrings
+      .stream()
+      .filter(Objects::nonNull)
+      .map(LineString::getCoordinates)
+      .filter(nonZeroLength)
+      .<CoordinateArrayListSequence>collect(
+        CoordinateArrayListSequence::new,
+        (acc, segment) -> {
+          for (Coordinate coordinate : segment) {
+            if (acc.size() == 0 || !acc.getCoordinate(acc.size() - 1).equals(coordinate)) {
+              acc.add(coordinate);
             }
-          },
-          (head, tail) -> head.extend(tail.toCoordinateArray())
-        )
-    );
+          }
+        },
+        (head, tail) -> head.extend(tail.toCoordinateArray())
+      );
+    if (coordinates.size() <= 1) {
+      coordinates.add(coordinates.getCoordinate(0));
+    }
+
+    return factory.createLineString(coordinates);
   }
 
   public static LineString addStartEndCoordinatesToLineString(

@@ -1,6 +1,7 @@
 package org.opentripplanner.transit.model.site;
 
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -83,6 +84,16 @@ public interface StopLocation extends LogInfo {
   @Nullable
   default Station getParentStation() {
     return null;
+  }
+
+  default List<Station> getParentStations() {
+    var result = new ArrayList<Station>();
+    var station = getParentStation();
+    while (station != null) {
+      result.add(station);
+      station = station.getParentStation();
+    }
+    return result;
   }
 
   @Nullable

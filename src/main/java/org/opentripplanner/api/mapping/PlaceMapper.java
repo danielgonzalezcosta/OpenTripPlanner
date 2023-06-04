@@ -1,12 +1,7 @@
 package org.opentripplanner.api.mapping;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import org.opentripplanner.api.model.ApiPlace;
 import org.opentripplanner.api.model.ApiVehicleParkingSpaces;
@@ -16,6 +11,7 @@ import org.opentripplanner.model.plan.StopArrival;
 import org.opentripplanner.model.plan.VehicleParkingWithEntrance;
 import org.opentripplanner.routing.vehicle_parking.VehicleParkingSpaces;
 import org.opentripplanner.transit.model.site.RegularStop;
+import org.opentripplanner.transit.model.site.Station;
 
 public class PlaceMapper {
 
@@ -62,6 +58,13 @@ public class PlaceMapper {
 
     if (domain.stop != null) {
       api.stopId = FeedScopedIdMapper.mapToApi(domain.stop.getId());
+      api.parentStopIds =
+        domain.stop
+          .getParentStations()
+          .stream()
+          .map(Station::getId)
+          .map(FeedScopedIdMapper::mapToApi)
+          .collect(Collectors.toList());
       api.stopCode = domain.stop.getCode();
       api.platformCode =
         domain.stop instanceof RegularStop ? ((RegularStop) domain.stop).getPlatformCode() : null;
@@ -74,6 +77,7 @@ public class PlaceMapper {
     if (domain.coordinate != null) {
       api.lon = domain.coordinate.longitude();
       api.lat = domain.coordinate.latitude();
+      api.elevation = domain.coordinate.elevation();
     }
 
     api.arrival = Optional.ofNullable(arrival).map(GregorianCalendar::from).orElse(null);

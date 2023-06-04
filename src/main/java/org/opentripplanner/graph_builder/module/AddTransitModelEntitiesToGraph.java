@@ -2,12 +2,7 @@ package org.opentripplanner.graph_builder.module;
 
 import static org.opentripplanner.framework.geometry.SphericalDistanceLibrary.distance;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import org.opentripplanner.ext.flex.trip.FlexTrip;
 import org.opentripplanner.framework.application.OTPFeature;
 import org.opentripplanner.framework.i18n.I18NString;
@@ -20,27 +15,13 @@ import org.opentripplanner.street.model.edge.ElevatorAlightEdge;
 import org.opentripplanner.street.model.edge.ElevatorBoardEdge;
 import org.opentripplanner.street.model.edge.ElevatorHopEdge;
 import org.opentripplanner.street.model.edge.PathwayEdge;
-import org.opentripplanner.street.model.vertex.ElevatorOffboardVertex;
-import org.opentripplanner.street.model.vertex.ElevatorOnboardVertex;
-import org.opentripplanner.street.model.vertex.StationElementVertex;
-import org.opentripplanner.street.model.vertex.TransitBoardingAreaVertex;
-import org.opentripplanner.street.model.vertex.TransitEntranceVertex;
-import org.opentripplanner.street.model.vertex.TransitPathwayNodeVertex;
-import org.opentripplanner.street.model.vertex.TransitStopVertex;
-import org.opentripplanner.street.model.vertex.TransitStopVertexBuilder;
+import org.opentripplanner.street.model.vertex.*;
 import org.opentripplanner.transit.model.basic.Accessibility;
 import org.opentripplanner.transit.model.basic.TransitMode;
 import org.opentripplanner.transit.model.framework.FeedScopedId;
 import org.opentripplanner.transit.model.network.TripPattern;
 import org.opentripplanner.transit.model.organization.Agency;
-import org.opentripplanner.transit.model.site.BoardingArea;
-import org.opentripplanner.transit.model.site.Entrance;
-import org.opentripplanner.transit.model.site.Pathway;
-import org.opentripplanner.transit.model.site.PathwayMode;
-import org.opentripplanner.transit.model.site.PathwayNode;
-import org.opentripplanner.transit.model.site.RegularStop;
-import org.opentripplanner.transit.model.site.StationElement;
-import org.opentripplanner.transit.model.site.StopLocation;
+import org.opentripplanner.transit.model.site.*;
 import org.opentripplanner.transit.service.TransitModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -263,6 +244,7 @@ public class AddTransitModelEntitiesToGraph {
       fromVertex.getLabel() + "_" + pathway.getId() + "_offboard",
       fromVertex.getX(),
       fromVertex.getY(),
+      fromVertex.getZ(),
       fromLevel.name()
     );
     ElevatorOffboardVertex toOffboardVertex = new ElevatorOffboardVertex(
@@ -270,6 +252,7 @@ public class AddTransitModelEntitiesToGraph {
       toVertex.getLabel() + "_" + pathway.getId() + "_offboard",
       toVertex.getX(),
       toVertex.getY(),
+      toVertex.getZ(),
       toLevel.name()
     );
 
@@ -281,6 +264,7 @@ public class AddTransitModelEntitiesToGraph {
       fromVertex.getLabel() + "_" + pathway.getId() + "_onboard",
       fromVertex.getX(),
       fromVertex.getY(),
+      fromVertex.getZ(),
       fromLevel.name()
     );
     ElevatorOnboardVertex toOnboardVertex = new ElevatorOnboardVertex(
@@ -288,6 +272,7 @@ public class AddTransitModelEntitiesToGraph {
       toVertex.getLabel() + "_" + pathway.getId() + "_onboard",
       toVertex.getX(),
       toVertex.getY(),
+      toVertex.getZ(),
       toLevel.name()
     );
 

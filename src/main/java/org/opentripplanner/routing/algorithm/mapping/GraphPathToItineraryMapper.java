@@ -4,11 +4,7 @@ import static org.opentripplanner.street.search.state.VehicleRentalState.RENTING
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.impl.PackedCoordinateSequence;
@@ -18,27 +14,13 @@ import org.opentripplanner.ext.flex.edgetype.FlexTripEdge;
 import org.opentripplanner.framework.application.OTPFeature;
 import org.opentripplanner.framework.geometry.GeometryUtils;
 import org.opentripplanner.framework.i18n.I18NString;
-import org.opentripplanner.model.plan.ElevationProfile;
-import org.opentripplanner.model.plan.Itinerary;
-import org.opentripplanner.model.plan.Leg;
-import org.opentripplanner.model.plan.Place;
-import org.opentripplanner.model.plan.StreetLeg;
-import org.opentripplanner.model.plan.StreetLegBuilder;
-import org.opentripplanner.model.plan.WalkStep;
+import org.opentripplanner.model.plan.*;
 import org.opentripplanner.routing.services.notes.StreetNotesService;
 import org.opentripplanner.service.vehiclerental.street.VehicleRentalEdge;
 import org.opentripplanner.service.vehiclerental.street.VehicleRentalPlaceVertex;
-import org.opentripplanner.street.model.edge.BoardingLocationToStopLink;
-import org.opentripplanner.street.model.edge.Edge;
-import org.opentripplanner.street.model.edge.PathwayEdge;
-import org.opentripplanner.street.model.edge.StreetEdge;
-import org.opentripplanner.street.model.edge.VehicleParkingEdge;
+import org.opentripplanner.street.model.edge.*;
 import org.opentripplanner.street.model.note.StreetNote;
-import org.opentripplanner.street.model.vertex.StreetVertex;
-import org.opentripplanner.street.model.vertex.TemporaryStreetLocation;
-import org.opentripplanner.street.model.vertex.TransitStopVertex;
-import org.opentripplanner.street.model.vertex.VehicleParkingEntranceVertex;
-import org.opentripplanner.street.model.vertex.Vertex;
+import org.opentripplanner.street.model.vertex.*;
 import org.opentripplanner.street.search.TraverseMode;
 import org.opentripplanner.street.search.state.State;
 
@@ -292,15 +274,26 @@ public class GraphPathToItineraryMapper {
     double distanceOffset,
     double heightOffset
   ) {
-    if (!(edge instanceof StreetEdge elevEdge)) {
-      return ElevationProfile.empty();
+    Coordinate[] coordArr = null;
+    if (edge instanceof StreetEdge elevEdge && elevEdge.getElevationProfile() != null) {
+      coordArr = elevEdge.getElevationProfile().toCoordinateArray();
     }
-    if (elevEdge.getElevationProfile() == null) {
+    if (edge instanceof PathwayEdge || edge instanceof ElevatorEdge) {
+      coordArr =
+        new Coordinate[] {
+          new Coordinate(0, Optional.ofNullable(edge.getFromVertex().getElevation()).orElse(0.)),
+          new Coordinate(
+            edge.getDistanceMeters(),
+            Optional.ofNullable(edge.getToVertex().getElevation()).orElse(0.)
+          ),
+        };
+    }
+
+    if (coordArr == null) {
       return ElevationProfile.empty();
     }
 
     var out = ElevationProfile.of();
-    Coordinate[] coordArr = elevEdge.getElevationProfile().toCoordinateArray();
     for (final Coordinate coordinate : coordArr) {
       out.step(coordinate.x + distanceOffset, coordinate.y + heightOffset);
     }
@@ -449,7 +442,7 @@ public class GraphPathToItineraryMapper {
 
     double distanceOffset = 0;
     for (final Edge edge : edges) {
-      if (edge.getDistanceMeters() > 0) {
+      if (edge.getDistanceMeters() > 0 || edge instanceof ElevatorHopEdge) {
         builder.add(encodeElevationProfileWithNaN(edge, distanceOffset, heightOffset));
         distanceOffset += edge.getDistanceMeters();
       }

@@ -14,4 +14,9 @@ public abstract class StationElementVertex extends Vertex {
   /** Get the corresponding StationElement */
   @Nonnull
   public abstract StationElement getStationElement();
+
+  @Override
+  public Double getElevation() {
+    return getStationElement().getCoordinate().elevation();
+  }
 }

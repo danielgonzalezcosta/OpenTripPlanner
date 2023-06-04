@@ -10,7 +10,6 @@ import java.util.Collection;
 import java.util.List;
 import org.locationtech.jts.geom.Coordinate;
 import org.opentripplanner.astar.spi.AStarVertex;
-import org.opentripplanner.framework.geometry.DirectionUtils;
 import org.opentripplanner.framework.i18n.I18NString;
 import org.opentripplanner.framework.i18n.NonLocalizedString;
 import org.opentripplanner.routing.graph.Graph;
@@ -140,6 +139,10 @@ public abstract class Vertex implements AStarVertex<State, Edge, Vertex>, Serial
     return getLat();
   }
 
+  public final double getZ() {
+    return getElevation();
+  }
+
   /** Get the longitude of the vertex */
   public final double getLon() {
     return x;
@@ -148,6 +151,10 @@ public abstract class Vertex implements AStarVertex<State, Edge, Vertex>, Serial
   /** Get the latitude of the vertex */
   public final double getLat() {
     return y;
+  }
+
+  public Double getElevation() {
+    return null;
   }
 
   /** If this vertex is located on only one street, get that street's name */

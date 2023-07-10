@@ -122,6 +122,7 @@ class PathwayEdgeTest {
 
     var state = assertThatEdgeIsTraversable(edge);
     assertEquals(6, state.getElapsedTimeSeconds());
+    assertEquals(60, state.getWalkDistance());
     assertEquals(12, state.getWeight());
   }
 
@@ -142,6 +143,7 @@ class PathwayEdgeTest {
 
     var state = assertThatEdgeIsTraversable(edge, true);
     assertEquals(6, state.getElapsedTimeSeconds());
+    assertEquals(60, state.getWalkDistance());
     assertEquals(300.0, state.getWeight());
   }
 

@@ -133,8 +133,8 @@ public class StreetLinkerModule implements GraphBuilderModule {
           LinkingDirection.BOTH_WAYS,
           (vertex, streetVertex) ->
             List.of(
-              new StreetTransitStopLink((TransitStopVertex) vertex, streetVertex),
-              new StreetTransitStopLink(streetVertex, (TransitStopVertex) vertex)
+              new StreetTransitStopLink((TransitStopVertex) vertex, streetVertex, modeSet),
+              new StreetTransitStopLink(streetVertex, (TransitStopVertex) vertex, modeSet)
             )
         );
 

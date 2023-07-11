@@ -8,6 +8,8 @@ import org.opentripplanner.framework.tostring.ToStringBuilder;
 import org.opentripplanner.routing.api.request.preference.RoutingPreferences;
 import org.opentripplanner.street.model.vertex.StreetVertex;
 import org.opentripplanner.street.model.vertex.Vertex;
+import org.opentripplanner.street.search.TraverseMode;
+import org.opentripplanner.street.search.TraverseModeSet;
 import org.opentripplanner.street.search.state.State;
 import org.opentripplanner.street.search.state.StateEditor;
 import org.opentripplanner.transit.model.basic.Accessibility;
@@ -23,17 +25,28 @@ public abstract class StreetTransitEntityLink<T extends Vertex>
 
   private final T transitEntityVertex;
   private final Accessibility wheelchairAccessibility;
+  private final TraverseModeSet modeSet;
 
   public StreetTransitEntityLink(StreetVertex fromv, T tov, Accessibility wheelchairAccessibility) {
+    this(fromv, tov, wheelchairAccessibility, new TraverseModeSet(TraverseMode.WALK));
+  }
+
+  public StreetTransitEntityLink(StreetVertex fromv, T tov, Accessibility wheelchairAccessibility, TraverseModeSet modeSet) {
     super(fromv, tov);
     this.transitEntityVertex = tov;
     this.wheelchairAccessibility = wheelchairAccessibility;
+    this.modeSet = modeSet;
   }
 
   public StreetTransitEntityLink(T fromv, StreetVertex tov, Accessibility wheelchairAccessibility) {
+    this(fromv, tov, wheelchairAccessibility, new TraverseModeSet(TraverseMode.WALK));
+  }
+
+  public StreetTransitEntityLink(T fromv, StreetVertex tov, Accessibility wheelchairAccessibility, TraverseModeSet modeSet) {
     super(fromv, tov);
     this.transitEntityVertex = fromv;
     this.wheelchairAccessibility = wheelchairAccessibility;
+    this.modeSet = modeSet;
   }
 
   public String toString() {
@@ -99,6 +112,9 @@ public abstract class StreetTransitEntityLink<T extends Vertex>
         // Allow taking an owned bike in the station
         break;
       case WALK:
+        if (!modeSet.getWalk()) {
+          return State.empty();
+        }
         break;
       case CAR:
         // Forbid taking your own car in the station if P+R activated.

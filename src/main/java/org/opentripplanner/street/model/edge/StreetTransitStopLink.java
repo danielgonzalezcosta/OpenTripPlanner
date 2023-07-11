@@ -2,6 +2,8 @@ package org.opentripplanner.street.model.edge;
 
 import org.opentripplanner.street.model.vertex.StreetVertex;
 import org.opentripplanner.street.model.vertex.TransitStopVertex;
+import org.opentripplanner.street.search.TraverseMode;
+import org.opentripplanner.street.search.TraverseModeSet;
 
 /**
  * This represents the connection between a street vertex and a transit vertex where going from the
@@ -10,11 +12,19 @@ import org.opentripplanner.street.model.vertex.TransitStopVertex;
 public class StreetTransitStopLink extends StreetTransitEntityLink<TransitStopVertex> {
 
   public StreetTransitStopLink(StreetVertex fromv, TransitStopVertex tov) {
-    super(fromv, tov, tov.getWheelchairAccessibility());
+    super(fromv, tov, tov.getWheelchairAccessibility(), new TraverseModeSet(TraverseMode.WALK));
+  }
+
+  public StreetTransitStopLink(StreetVertex fromv, TransitStopVertex tov, TraverseModeSet modeSet) {
+    super(fromv, tov, tov.getWheelchairAccessibility(), modeSet);
   }
 
   public StreetTransitStopLink(TransitStopVertex fromv, StreetVertex tov) {
-    super(fromv, tov, fromv.getWheelchairAccessibility());
+    super(fromv, tov, fromv.getWheelchairAccessibility(), new TraverseModeSet(TraverseMode.WALK));
+  }
+
+  public StreetTransitStopLink(TransitStopVertex fromv, StreetVertex tov, TraverseModeSet modeSet) {
+    super(fromv, tov, fromv.getWheelchairAccessibility(), modeSet);
   }
 
   protected int getStreetToStopTime() {

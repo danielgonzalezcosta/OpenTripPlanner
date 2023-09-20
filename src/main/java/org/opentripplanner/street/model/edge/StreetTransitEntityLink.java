@@ -31,7 +31,12 @@ public abstract class StreetTransitEntityLink<T extends Vertex>
     this(fromv, tov, wheelchairAccessibility, new TraverseModeSet(TraverseMode.WALK));
   }
 
-  public StreetTransitEntityLink(StreetVertex fromv, T tov, Accessibility wheelchairAccessibility, TraverseModeSet modeSet) {
+  public StreetTransitEntityLink(
+    StreetVertex fromv,
+    T tov,
+    Accessibility wheelchairAccessibility,
+    TraverseModeSet modeSet
+  ) {
     super(fromv, tov);
     this.transitEntityVertex = tov;
     this.wheelchairAccessibility = wheelchairAccessibility;
@@ -42,7 +47,12 @@ public abstract class StreetTransitEntityLink<T extends Vertex>
     this(fromv, tov, wheelchairAccessibility, new TraverseModeSet(TraverseMode.WALK));
   }
 
-  public StreetTransitEntityLink(T fromv, StreetVertex tov, Accessibility wheelchairAccessibility, TraverseModeSet modeSet) {
+  public StreetTransitEntityLink(
+    T fromv,
+    StreetVertex tov,
+    Accessibility wheelchairAccessibility,
+    TraverseModeSet modeSet
+  ) {
     super(fromv, tov);
     this.transitEntityVertex = fromv;
     this.wheelchairAccessibility = wheelchairAccessibility;

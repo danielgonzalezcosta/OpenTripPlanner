@@ -68,6 +68,10 @@ public abstract class LayerBuilder<T> {
       return true;
     }
 
+    if ("-1".equals(zoomDescriptor)) {
+      return false;
+    }
+
     var matcher = ZOOM_LEVEL_PATTERN.matcher(zoomDescriptor);
     if (matcher.find()) {
       int minZoomLevel = Integer.parseInt(matcher.group(1));
